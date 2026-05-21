@@ -1,0 +1,46 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import * as authController from '../controllers/auth.controller.js';
+import * as channelController from '../controllers/channel.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
+import { validate } from '../middleware/validate.js';
+
+const router = Router();
+
+const registerSchema = z.object({
+  name: z.string().min(1).max(100),
+  email: z.string().email(),
+  username: z
+    .string()
+    .min(3)
+    .max(30)
+    .regex(/^[a-zA-Z0-9_]+$/),
+  password: z.string().min(4),
+  user_category: z
+    .enum(['admin', 'users', 'employee'])
+    .default('users'),
+});
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
+const channelUpsertSchema = z.object({
+  token: z.string().min(1),
+  page_id: z.string().min(1),
+  channel_type: z.enum(['instagram', 'facebook', 'linkedin']),
+});
+
+router.post('/register', validate(registerSchema), authController.register);
+router.post('/login', validate(loginSchema), authController.login);
+
+router.get('/channels', authenticate, channelController.getChannels);
+router.put(
+  '/channels',
+  authenticate,
+  validate(channelUpsertSchema),
+  channelController.upsertChannel
+);
+
+export default router;
