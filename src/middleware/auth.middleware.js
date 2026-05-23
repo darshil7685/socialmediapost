@@ -22,3 +22,10 @@ export function authenticate(req, res, next) {
     return fail(res, 401, 'Invalid or expired token');
   }
 }
+
+export function requireAdmin(req, res, next) {
+  if (req.user?.user_category !== 'admin') {
+    return fail(res, 403, 'Admin access required');
+  }
+  next();
+}

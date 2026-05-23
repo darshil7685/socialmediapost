@@ -92,6 +92,27 @@ Store social channel credentials per user (`channel_details` table).
 
 Returns channels for the authenticated user only. Optional query: `?channel_type=facebook`.
 
+### Customer queries
+
+**Submit (public)** — `POST /api/auth/customer-queries` (no auth). All body fields are optional (`name`, `company_name`, `phone_number`, `email_id`, `message`); omitted fields are stored as `null`. If provided, `email_id` must be a valid email.
+
+```bash
+curl -X POST http://localhost:3000/api/auth/customer-queries \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"John\",\"message\":\"Hello\"}"
+```
+
+Response `201`: `{ "success": true, "data": { "query": { ... } } }`
+
+**List (admin only)** — `GET /api/auth/customer-queries` with `Authorization: Bearer <token>` where `user_category` is `admin`:
+
+```bash
+curl http://localhost:3000/api/auth/customer-queries \
+  -H "Authorization: Bearer ADMIN_JWT"
+```
+
+Optional: `?limit=50` (max 100). Non-admin users receive `403`.
+
 ### Login
 
 ```bash

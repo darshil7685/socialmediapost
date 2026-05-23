@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { z } from 'zod';
 import * as authController from '../controllers/auth.controller.js';
 import * as channelController from '../controllers/channel.controller.js';
-import { authenticate } from '../middleware/auth.middleware.js';
+import * as customerQueryController from '../controllers/customer-query.controller.js';
+import { authenticate, requireAdmin } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validate.js';
 
 const router = Router();
@@ -32,6 +33,14 @@ const channelUpsertSchema = z.object({
   channel_type: z.enum(['instagram', 'facebook', 'linkedin']),
 });
 
+const customerQueryInsertSchema = z.object({
+  name: z.string().max(200).optional(),
+  company_name: z.string().max(200).optional(),
+  phone_number: z.string().max(30).optional(),
+  email_id: z.string().email().max(200).optional(),
+  message: z.string().max(5000).optional(),
+});
+
 router.post('/register', validate(registerSchema), authController.register);
 router.post('/login', validate(loginSchema), authController.login);
 
@@ -41,6 +50,18 @@ router.put(
   authenticate,
   validate(channelUpsertSchema),
   channelController.upsertChannel
+);
+
+router.post(
+  '/customer-queries',
+  validate(customerQueryInsertSchema),
+  customerQueryController.create
+);
+router.get(
+  '/customer-queries',
+  authenticate,
+  requireAdmin,
+  customerQueryController.list
 );
 
 export default router;

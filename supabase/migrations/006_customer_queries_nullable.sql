@@ -1,0 +1,6 @@
+ALTER TABLE public.customer_queries
+  ALTER COLUMN name DROP NOT NULL,
+  ALTER COLUMN company_name DROP NOT NULL,
+  ALTER COLUMN phone_number DROP NOT NULL,
+  ALTER COLUMN email_id DROP NOT NULL,
+  ALTER COLUMN message DROP NOT NULL;
