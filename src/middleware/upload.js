@@ -1,10 +1,13 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export const UPLOAD_DIR = path.join(__dirname, '../../uploads/media');
+export const UPLOAD_DIR = process.env.VERCEL
+  ? path.join(os.tmpdir(), 'stackpost-uploads')
+  : path.join(__dirname, '../../uploads/media');
 
 export function getMediaRelativePath(filename) {
   return path.join('uploads', 'media', filename).replace(/\\/g, '/');

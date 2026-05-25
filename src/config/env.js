@@ -4,8 +4,11 @@ const required = [
   'SUPABASE_URL',
   'SUPABASE_SERVICE_ROLE_KEY',
   'JWT_SECRET',
-  'DATABASE_URL',
 ];
+
+if (!process.env.VERCEL) {
+  required.push('DATABASE_URL');
+}
 
 for (const key of required) {
   if (!process.env[key]) {
@@ -23,11 +26,12 @@ if (
   );
 }
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.DATABASE_URL ?? '';
 const databaseSsl =
-  process.env.DATABASE_SSL === 'true' ||
-  (process.env.DATABASE_SSL !== 'false' &&
-    databaseUrl.includes('supabase.co'));
+  databaseUrl &&
+  (process.env.DATABASE_SSL === 'true' ||
+    (process.env.DATABASE_SSL !== 'false' &&
+      databaseUrl.includes('supabase.co')));
 
 export const env = {
   port: Number(process.env.PORT) || 3000,

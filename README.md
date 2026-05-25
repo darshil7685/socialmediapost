@@ -35,6 +35,29 @@ cp .env.example .env
 npm run dev
 ```
 
+## Deploy to Vercel
+
+This API runs as a serverless function via [`api/index.js`](api/index.js) and [`vercel.json`](vercel.json).
+
+1. Push the repo to GitHub and import the project on [vercel.com](https://vercel.com).
+2. Set **Environment variables** (Production):
+
+| Variable | Required on Vercel |
+|----------|-------------------|
+| `SUPABASE_URL` | Yes |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes |
+| `JWT_SECRET` | Yes |
+| `JWT_EXPIRES_IN` | Optional |
+| `META_GRAPH_VERSION` | Optional |
+| `DATABASE_URL` | No (migrations not run on Vercel) |
+
+3. Run migrations once locally or in Supabase SQL Editor: `npm run migrate`
+4. Deploy. Test: `https://YOUR-PROJECT.vercel.app/health`
+
+**Note:** Uploads use `/tmp` on Vercel (ephemeral). Files are not persisted on disk after the function ends; `file_path` in `broadcast_details` may not refer to a durable file on Vercel.
+
+Local development still uses `npm run dev` → [`src/server.js`](src/server.js) with `DATABASE_URL` required.
+
 ## API Endpoints
 
 ### Health check
