@@ -59,8 +59,6 @@ router.post(
 );
 router.get(
   '/customer-queries',
-  authenticate,
-  requireAdmin,
   customerQueryController.list
 );
 

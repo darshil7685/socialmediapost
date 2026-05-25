@@ -12,7 +12,7 @@ export async function create(req, res, next) {
 
 export async function list(req, res, next) {
   try {
-    const queries = await customerQueryService.listQueries(req.query.limit);
+    const queries = await customerQueryService.listQueries();
     return success(res, 200, { queries });
   } catch (err) {
     next(err);

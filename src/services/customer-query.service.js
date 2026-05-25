@@ -23,14 +23,11 @@ export async function createQuery(payload) {
   return data;
 }
 
-export async function listQueries(limit = 50) {
-  const cappedLimit = Math.min(Math.max(Number(limit) || 50, 1), 100);
-
+export async function listQueries() {
   const { data, error } = await supabase
     .from('customer_queries')
     .select(QUERY_SELECT)
-    .order('created_at', { ascending: false })
-    .limit(cappedLimit);
+    .order('created_at', { ascending: false });
 
   if (error) {
     throw error;

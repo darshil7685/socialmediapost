@@ -134,7 +134,7 @@ curl http://localhost:3000/api/auth/customer-queries \
   -H "Authorization: Bearer ADMIN_JWT"
 ```
 
-Optional: `?limit=50` (max 100). Non-admin users receive `403`.
+Returns all rows (newest first). Non-admin users receive `403`.
 
 ### Login
 
