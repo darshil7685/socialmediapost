@@ -1,4 +1,4 @@
-# StackPost API
+# Social Media Post API
 
 Express.js API with Supabase PostgreSQL and JWT authentication.
 
